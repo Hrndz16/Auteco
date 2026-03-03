@@ -46,3 +46,9 @@ h2 {
 .btn-cancelar:hover {
     background: #bb2d3b;
 }
+
+.acciones {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
