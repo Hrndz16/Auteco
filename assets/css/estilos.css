@@ -6,6 +6,50 @@ h2 {
     font-weight: bold;
 }
 
+.layout-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background: #1f2937;
+    color: #fff;
+    padding: 20px 14px;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-item {
+    border: none;
+    background: #374151;
+    color: #fff;
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: 0.2s;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background: #0d6efd;
+}
+
+.contenido-principal {
+    flex: 1;
+    padding: 32px;
+}
+
 /* BOTÓN AGREGAR */
 .btn-agregar {
     background: #0d6efd;
@@ -51,4 +95,24 @@ h2 {
     display: flex;
     justify-content: center;
     gap: 8px;
+}
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -270px;
+        bottom: 0;
+        z-index: 1040;
+        transition: left 0.25s ease;
+    }
+
+    .sidebar.mostrar {
+        left: 0;
+    }
+
+    .contenido-principal {
+        width: 100%;
+        padding: 20px;
+    }
 }
