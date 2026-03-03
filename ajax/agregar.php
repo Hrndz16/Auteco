@@ -1,23 +1,39 @@
 <?php
 include("../conexion.php");
 
-$marca  = $_POST['marca'];
-$modelo = $_POST['modelo'];
-$precio = $_POST['precio'];
+$marca = trim($_POST['marca'] ?? '');
+$modelo = trim($_POST['modelo'] ?? '');
+$precio = trim($_POST['precio'] ?? '');
 
-$conn->query("INSERT INTO motos (marca, modelo, precio)
-              VALUES ('$marca', '$modelo', '$precio')");
+if ($marca === '' || $modelo === '' || $precio === '') {
+    echo json_encode(["ok" => false, "mensaje" => "Datos incompletos"]);
+    exit;
+}
+
+$stmt = $conn->prepare("INSERT INTO motos (marca, modelo, precio) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $marca, $modelo, $precio);
+$stmt->execute();
 
 $id = $conn->insert_id;
 
+$marcaSafe = htmlspecialchars($marca);
+$modeloSafe = htmlspecialchars($modelo);
+$precioSafe = htmlspecialchars($precio);
+
+$fila = "
+<tr id='moto-$id'>
+    <td>$marcaSafe</td>
+    <td>$modeloSafe</td>
+    <td>$precioSafe</td>
+    <td class='text-center acciones'>
+        <button class='btn btn-sm btn-info text-white btn-ver' data-id='$id'>Ver</button>
+        <button class='btn btn-sm btn-warning btn-editar' data-id='$id'>Editar</button>
+        <button class='btn btn-sm btn-danger btn-eliminar' data-id='$id'>Eliminar</button>
+    </td>
+</tr>
+";
+
 echo json_encode([
     "ok" => true,
-    "fila" => "
-        <tr>
-            <td>$id</td>
-            <td>$marca</td>
-            <td>$modelo</td>
-            <td>$precio</td>
-        </tr>
-    "
+    "fila" => $fila
 ]);
