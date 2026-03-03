@@ -1,7 +1,7 @@
 <?php
 $host = "localhost";
-$user = "marlon";
-$pass = "1234";
+$user = "root";
+$pass = "";
 $db   = "autecoDB";
 
 $conn = new mysqli($host, $user, $pass, $db);
