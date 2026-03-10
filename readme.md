@@ -21,7 +21,7 @@ Campos:
 * `nombre`: nombre de la categoría de moto.
 
 ```sql
-CREATE TABLE categoria (
+CREATE TABLE categorias (
     id_categoria INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL
 );
@@ -90,29 +90,3 @@ INSERT INTO motos (marca, modelo, precio, id_categoria) VALUES
 ('Suzuki', 'DR 650', 32000000, 3),
 ('AKT', 'Dynamic Pro', 6500000, 2);
 ```
-
----
-
-# Consulta con JOIN
-
-Para obtener las motos junto con su categoría:
-
-```sql
-SELECT m.marca, m.modelo, m.precio, c.nombre AS categoria
-FROM moto m
-JOIN categoria c ON m.id_categoria = c.id_categoria;
-```
-
----
-
-# Tecnologías utilizadas
-
-* SQL
-* MySQL / MariaDB
-* Git / GitHub
-
----
-
-# Autor
-
-Proyecto académico para práctica de **bases de datos relacionales y uso de llaves foráneas**.
