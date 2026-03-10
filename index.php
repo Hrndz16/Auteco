@@ -42,8 +42,11 @@ while ($row = $resCategorias->fetch_assoc()) {
         </div>
 
         <section id="vistaMotos" class="vista-tabla">
+            <div class="table-tools mb-3">
+                <input type="text" class="form-control table-search" id="buscarMotos" placeholder="Buscar en motos...">
+            </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle">
+                <table class="table table-bordered table-hover align-middle" id="tablaMotosListado">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -88,11 +91,15 @@ while ($row = $resCategorias->fetch_assoc()) {
                     </tbody>
                 </table>
             </div>
+            <div class="table-pagination" id="paginacionMotos"></div>
         </section>
 
         <section id="vistaCategorias" class="vista-tabla d-none">
+            <div class="table-tools mb-3">
+                <input type="text" class="form-control table-search" id="buscarCategorias" placeholder="Buscar en categorías...">
+            </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-hover align-middle">
+                <table class="table table-bordered table-hover align-middle" id="tablaCategoriasListado">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -115,6 +122,7 @@ while ($row = $resCategorias->fetch_assoc()) {
                     </tbody>
                 </table>
             </div>
+            <div class="table-pagination" id="paginacionCategorias"></div>
         </section>
     </main>
 </div>

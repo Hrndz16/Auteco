@@ -24,6 +24,86 @@ const sidebar = document.getElementById("sidebar");
 document.getElementById("abrirSidebar").addEventListener("click", () => sidebar.classList.add("mostrar"));
 document.getElementById("cerrarSidebar").addEventListener("click", () => sidebar.classList.remove("mostrar"));
 
+function crearTablaPaginada({ tbody, buscador, paginacion, pageSize = 5 }) {
+    const estado = { termino: "", paginaActual: 1 };
+
+    function filtrarFilas() {
+        return Array.from(tbody.querySelectorAll("tr")).filter((fila) => fila.textContent.toLowerCase().includes(estado.termino));
+    }
+
+    function renderPaginacion(totalPaginas) {
+        paginacion.innerHTML = "";
+        if (totalPaginas <= 0) return;
+
+        const info = document.createElement("span");
+        info.className = "page-info";
+        info.textContent = `Página ${estado.paginaActual} de ${totalPaginas}`;
+
+        const btnAnterior = document.createElement("button");
+        btnAnterior.className = "btn btn-sm btn-outline-secondary";
+        btnAnterior.textContent = "Anterior";
+        btnAnterior.disabled = estado.paginaActual === 1;
+        btnAnterior.addEventListener("click", () => {
+            estado.paginaActual -= 1;
+            render();
+        });
+
+        const btnSiguiente = document.createElement("button");
+        btnSiguiente.className = "btn btn-sm btn-outline-secondary";
+        btnSiguiente.textContent = "Siguiente";
+        btnSiguiente.disabled = estado.paginaActual >= totalPaginas;
+        btnSiguiente.addEventListener("click", () => {
+            estado.paginaActual += 1;
+            render();
+        });
+
+        paginacion.append(info, btnAnterior, btnSiguiente);
+    }
+
+    function render() {
+        const filas = filtrarFilas();
+        const totalPaginas = Math.ceil(filas.length / pageSize);
+
+        if (totalPaginas === 0) {
+            estado.paginaActual = 1;
+        } else if (estado.paginaActual > totalPaginas) {
+            estado.paginaActual = totalPaginas;
+        }
+
+        const inicio = (estado.paginaActual - 1) * pageSize;
+        const fin = inicio + pageSize;
+        const filasPagina = filas.slice(inicio, fin);
+
+        Array.from(tbody.querySelectorAll("tr")).forEach((fila) => fila.classList.add("d-none"));
+        filasPagina.forEach((fila) => fila.classList.remove("d-none"));
+
+        renderPaginacion(totalPaginas);
+    }
+
+    buscador.addEventListener("input", () => {
+        estado.termino = buscador.value.trim().toLowerCase();
+        estado.paginaActual = 1;
+        render();
+    });
+
+    return { render };
+}
+
+const tablaMotosControl = crearTablaPaginada({
+    tbody: tablaMotos,
+    buscador: document.getElementById("buscarMotos"),
+    paginacion: document.getElementById("paginacionMotos"),
+});
+
+const tablaCategoriasControl = crearTablaPaginada({
+    tbody: tablaCategorias,
+    buscador: document.getElementById("buscarCategorias"),
+    paginacion: document.getElementById("paginacionCategorias"),
+});
+
+tablaMotosControl.render();
+tablaCategoriasControl.render();
+
 document.querySelectorAll(".menu-item").forEach((btn) => {
     btn.addEventListener("click", function () {
         document.querySelectorAll(".menu-item").forEach((item) => item.classList.remove("active"));
@@ -36,12 +116,14 @@ document.querySelectorAll(".menu-item").forEach((btn) => {
             tituloVista.textContent = "Listado de Motos";
             btnAgregarMoto.classList.remove("d-none");
             btnAgregarCategoria.classList.add("d-none");
+            tablaMotosControl.render();
         } else {
             vistaCategorias.classList.remove("d-none");
             vistaMotos.classList.add("d-none");
             tituloVista.textContent = "Listado de Categorías";
             btnAgregarCategoria.classList.remove("d-none");
             btnAgregarMoto.classList.add("d-none");
+            tablaCategoriasControl.render();
         }
 
         sidebar.classList.remove("mostrar");
@@ -95,6 +177,7 @@ formAgregarMoto.addEventListener("submit", function (e) {
             }
 
             tablaMotos.insertAdjacentHTML("beforeend", data.fila);
+            tablaMotosControl.render();
             bootstrap.Modal.getInstance(document.getElementById("modalAgregarMoto")).hide();
             this.reset();
         });
@@ -172,6 +255,7 @@ formEditarMoto.addEventListener("submit", function (e) {
                 fila.children[4].dataset.idCategoria = moto.id_categoria;
             }
 
+            tablaMotosControl.render();
             modalEditarMoto.hide();
         });
 });
@@ -193,6 +277,7 @@ document.getElementById("confirmarEliminarMoto").addEventListener("click", funct
 
             const fila = document.getElementById(`moto-${data.id}`);
             if (fila) fila.remove();
+            tablaMotosControl.render();
             modalEliminarMoto.hide();
         });
 });
@@ -213,6 +298,7 @@ formAgregarCategoria.addEventListener("submit", function (e) {
 
             tablaCategorias.insertAdjacentHTML("beforeend", data.fila);
             actualizarSelectCategorias(data.categoria.id_categoria, data.categoria.nombre);
+            tablaCategoriasControl.render();
             bootstrap.Modal.getInstance(document.getElementById("modalAgregarCategoria")).hide();
             this.reset();
         });
@@ -287,6 +373,8 @@ formEditarCategoria.addEventListener("submit", function (e) {
             });
 
             actualizarSelectCategorias(categoria.id_categoria, categoria.nombre);
+            tablaCategoriasControl.render();
+            tablaMotosControl.render();
             modalEditarCategoria.hide();
         });
 });
@@ -309,6 +397,7 @@ document.getElementById("confirmarEliminarCategoria").addEventListener("click", 
             const fila = document.getElementById(`categoria-${data.id_categoria}`);
             if (fila) fila.remove();
             removerCategoriaDeSelects(data.id_categoria);
+            tablaCategoriasControl.render();
             modalEliminarCategoria.hide();
         });
 });
