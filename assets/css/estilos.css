@@ -97,6 +97,23 @@ h2 {
     gap: 8px;
 }
 
+.table-tools {
+    max-width: 360px;
+}
+
+.table-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.table-pagination .page-info {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
 @media (max-width: 991.98px) {
     .sidebar {
         position: fixed;
