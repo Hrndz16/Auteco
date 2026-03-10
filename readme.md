@@ -11,7 +11,7 @@ La estructura incluye dos tablas principales:
 
 # Estructura de la Base de Datos
 
-## Tabla `categoria`
+## Tabla `categorias`
 
 Esta tabla almacena las categorías de las motos.
 
@@ -30,7 +30,7 @@ CREATE TABLE categoria (
 ### Insertar categorías
 
 ```sql
-INSERT INTO categoria (nombre) VALUES
+INSERT INTO categorias (nombre) VALUES
 ('Deportiva'),
 ('Scooter'),
 ('Enduro'),
