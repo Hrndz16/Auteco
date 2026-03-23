@@ -1,24 +1,37 @@
-# Base de Datos de Motos 🏍️
+# Base de Datos de Motos
 
-Este proyecto contiene un ejemplo simple de una base de datos relacional para gestionar **motos y sus categorías** utilizando SQL.
+Proyecto PHP sencillo para gestionar motos y categorias con operaciones CRUD y una interfaz basada en Bootstrap.
 
-La estructura incluye dos tablas principales:
+## Estructura del proyecto
 
-* **categoria**: almacena los tipos o categorías de motos.
-* **moto**: almacena la información de cada moto y se relaciona con la tabla `categoria`.
+```text
+Auteco/
+|-- actions/
+|   |-- categorias/
+|   `-- motos/
+|-- assets/
+|   |-- css/
+|   `-- js/
+|-- config/
+|-- includes/
+|-- views/
+|   |-- modals/
+|   `-- sections/
+|-- index.php
+`-- readme.md
+```
 
----
+## Que hace cada carpeta
 
-# Estructura de la Base de Datos
+- `actions/`: endpoints que reciben las peticiones `fetch` del frontend.
+- `assets/`: archivos estaticos como estilos y JavaScript.
+- `config/`: configuracion de conexion a la base de datos.
+- `includes/`: helpers reutilizables para bootstrap de la app, respuestas JSON y renderizado.
+- `views/`: fragmentos de interfaz separados por secciones y modales.
 
-## Tabla `categorias`
+## Tablas principales
 
-Esta tabla almacena las categorías de las motos.
-
-Campos:
-
-* `id_categoria`: identificador único de la categoría (clave primaria).
-* `nombre`: nombre de la categoría de moto.
+### Tabla `categorias`
 
 ```sql
 CREATE TABLE categorias (
@@ -27,31 +40,7 @@ CREATE TABLE categorias (
 );
 ```
 
-### Insertar categorías
-
-```sql
-INSERT INTO categorias (nombre) VALUES
-('Deportiva'),
-('Scooter'),
-('Enduro'),
-('Naked'),
-('Touring'),
-('Custom');
-```
-
----
-
-## Tabla `motos`
-
-Esta tabla almacena la información de las motos.
-
-Campos:
-
-* `id_moto`: identificador único de la moto (clave primaria autoincremental).
-* `marca`: marca de la moto.
-* `modelo`: modelo de la moto.
-* `precio`: precio de la moto.
-* `id_categoria`: referencia a la categoría de la moto (clave foránea).
+### Tabla `motos`
 
 ```sql
 CREATE TABLE motos (
@@ -59,34 +48,14 @@ CREATE TABLE motos (
     marca VARCHAR(50) NOT NULL,
     modelo VARCHAR(50) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    id_categoria INT,
-    FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+    id_categoria INT NOT NULL,
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
 );
 ```
 
----
+## Flujo general
 
-# Relación entre tablas
-
-La base de datos tiene una relación **uno a muchos**:
-
-```
-categoria (1) ---- (N) moto
-```
-
-Esto significa que:
-
-* Una **categoría** puede tener muchas **motos**.
-* Cada **moto** pertenece a una sola **categoría**.
-
----
-
-# Ejemplo de inserción de datos
-
-```sql
-INSERT INTO motos (marca, modelo, precio, id_categoria) VALUES
-('Yamaha', 'R3', 28000000, 1),
-('Honda', 'CB 190R', 14500000, 4),
-('Suzuki', 'DR 650', 32000000, 3),
-('AKT', 'Dynamic Pro', 6500000, 2);
-```
+1. `index.php` carga las motos y categorias necesarias para pintar la vista inicial.
+2. `assets/js/app.js` maneja eventos, modales, filtros y peticiones AJAX.
+3. `actions/motos/*.php` y `actions/categorias/*.php` procesan cada operacion CRUD.
+4. `includes/view_helpers.php` genera filas y opciones reutilizables para mantener la vista consistente.
