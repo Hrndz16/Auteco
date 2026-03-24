@@ -2,6 +2,29 @@
 
 Proyecto PHP sencillo para gestionar motos y categorias con operaciones CRUD y una interfaz basada en Bootstrap.
 
+## Ejecutar con Docker
+
+El proyecto puede levantarse con dos contenedores:
+
+- `web`: PHP 8.2 con Apache para servir la pagina.
+- `db`: MySQL 8.0 para la base de datos `autecoDB`.
+
+## Requisitos
+
+- Docker
+- Docker Compose
+
+## Levantar el proyecto
+
+```bash
+docker compose up --build
+```
+
+## Accesos
+
+- Aplicacion web: `http://localhost:8080`
+- Base de datos MySQL: `localhost:3306`
+
 ## Estructura del proyecto
 
 ```text
@@ -13,10 +36,14 @@ Auteco/
 |   |-- css/
 |   `-- js/
 |-- config/
+|-- docker/
+|   `-- mysql/
 |-- includes/
 |-- views/
 |   |-- modals/
 |   `-- sections/
+|-- Dockerfile
+|-- docker-compose.yml
 |-- index.php
 `-- readme.md
 ```
@@ -26,6 +53,7 @@ Auteco/
 - `actions/`: endpoints que reciben las peticiones `fetch` del frontend.
 - `assets/`: archivos estaticos como estilos y JavaScript.
 - `config/`: configuracion de conexion a la base de datos.
+- `docker/mysql/init.sql`: crea las tablas al iniciar MySQL por primera vez.
 - `includes/`: helpers reutilizables para bootstrap de la app, respuestas JSON y renderizado.
 - `views/`: fragmentos de interfaz separados por secciones y modales.
 
